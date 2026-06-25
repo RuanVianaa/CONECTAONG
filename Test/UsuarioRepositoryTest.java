@@ -1,6 +1,8 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import model.Usuarios;
@@ -39,6 +41,22 @@ public class UsuarioRepositoryTest {
         // Teste de Falha (Senha incorreta)
         model.Usuarios loginFalha = repository.realizarLogin("bianca@emailtest.com", "senha_errada");
         assertNull(loginFalha);
+    }
+
+    @Test
+    public void testImpedirCadastroDeEmailDuplicado() {
+        UsuarioRepository repository = new UsuarioRepository();
+
+        // 1. Cadastrando o primeiro usuário passando os 4 atributos direto no
+        // construtor
+        Usuarios u1 = new Usuarios("Ruan", "ruan@email.com", "123456", "Doador");
+        boolean primeiroCadastro = repository.salvar(u1);
+        assertTrue(primeiroCadastro);
+
+        // 2. Tentando cadastrar o segundo usuário com o mesmo e-mail
+        Usuarios u2 = new Usuarios("Outro Nome", "ruan@email.com", "654321", "Doador");
+        boolean segundoCadastro = repository.salvar(u2);
+        assertFalse(segundoCadastro);
     }
 
 }

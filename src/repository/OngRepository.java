@@ -26,11 +26,17 @@ public class OngRepository {
         return null;
     }
 
-    // Aprovar ou Rejeitar ONG (Requisito do Admin)
-    public boolean atualizarStatus(int idOng, String novoStatus) {
+    // Aprovar ou Rejeitar ONG (Apenas Administrador pode fazer isso)
+    public boolean atualizarStatus(int idOng, String novoStatus, String perfilUsuario) {
+        // 1. Verifica se quem está tentando alterar é um Administrador
+        if (perfilUsuario == null || !perfilUsuario.equalsIgnoreCase("Administrador")) {
+            return false; // Bloqueia se não for admin
+        }
+
+        // 2. Executa a lógica se for admin
         Ong ong = buscarPorId(idOng);
-        if (ong != null && (novoStatus.equals("APROVADA") || novoStatus.equals("REJEITADA"))) {
-            ong.setStatus(novoStatus);
+        if (ong != null && (novoStatus.equalsIgnoreCase("APROVADA") || novoStatus.equalsIgnoreCase("REJEITADA"))) {
+            ong.setStatus(novoStatus.toUpperCase());
             return true;
         }
         return false;
@@ -46,6 +52,17 @@ public class OngRepository {
             }
         }
         return listaAprovadas;
+    }
+
+    // Listar apenas as ONGs Pendentes (Para o Administrador analisar)
+    public List<Ong> listarPendentes() {
+        List<Ong> listaPendentes = new ArrayList<>();
+        for (Ong o : ongs) {
+            if ("PENDENTE".equalsIgnoreCase(o.getStatus())) {
+                listaPendentes.add(o);
+            }
+        }
+        return listaPendentes;
     }
 
     // Filtrar por Categoria

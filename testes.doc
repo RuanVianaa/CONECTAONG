@@ -1,0 +1,17 @@
+Compilar:
+javac -cp "lib/*;src" src/*.java src/model/*.java src/repository/*.java -d bin
+
+Para rodar todos os testes do sistema de uma vez só:
+java -jar lib/junit-platform-console-standalone-1.13.0-M3.jar --class-path bin --scan-class-path
+
+Para rodar especificamente os testes de Usuário (Validação de E-mail Duplicado):
+java -jar lib/junit-platform-console-standalone-1.13.0-M3.jar --class-path bin --select-class UsuarioRepositoryTest
+
+Para rodar especificamente os testes de ONG (Controle de Acesso por Perfil/Admin):
+java -jar lib/junit-platform-console-standalone-1.13.0-M3.jar --class-path bin --select-class OngRepositoryTest
+
+Para rodar especificamente os testes de Doação (Cálculos e Filtros):
+java -jar lib/junit-platform-console-standalone-1.13.0-M3.jar --class-path bin --select
+
+Para rodar o Main: 
+java -cp bin Main
